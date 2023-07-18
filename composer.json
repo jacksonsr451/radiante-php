@@ -1,0 +1,18 @@
+{
+  "name": "jacksonsr45/radiante-php",
+  "description": "This is a simple microframework in PHP",
+  "type": "library",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "Jacksonsr45\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "jacksonsr45",
+      "email": "jackson.severino.rocha@escola.pr.gov.br"
+    }
+  ],
+  "require": {}
+}
