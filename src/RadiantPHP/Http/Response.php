@@ -48,4 +48,9 @@ class Response
         $this->setBody($json);
         $this->send();
     }
+
+    public function getHeaders()
+    {
+        return $this->headers;
+    }
 }
