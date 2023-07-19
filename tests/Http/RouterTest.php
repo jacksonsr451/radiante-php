@@ -4,6 +4,7 @@ namespace Tests\Http;
 
 use Jacksonsr45\RadiantPHP\Http\Router;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 class RouterTest extends TestCase
 {
@@ -44,7 +45,7 @@ class RouterTest extends TestCase
 
     private function getPrivateProperty($object, $property)
     {
-        $reflection = new \ReflectionClass($object);
+        $reflection = new ReflectionClass($object);
         $property = $reflection->getProperty($property);
         $property->setAccessible(true);
         return $property->getValue($object);
