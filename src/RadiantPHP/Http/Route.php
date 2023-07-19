@@ -103,4 +103,9 @@ class Route
             die();
         }
     }
+
+    public function getParams()
+    {
+        return $this->params;
+    }
 }
