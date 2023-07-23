@@ -33,7 +33,7 @@ class Response
         return $this;
     }
 
-    public function send(): void
+    public function send(): Response
     {
         http_response_code($this->statusCode);
         foreach ($this->headers as $name => $value) {
@@ -41,14 +41,16 @@ class Response
         }
 
         echo $this->body;
+        return $this;
     }
 
-    public function sendJson($data): void
+    public function sendJson($data): Response
     {
         $this->setHeader('Content-Type', 'application/json');
         $json = json_encode($data, JSON_UNESCAPED_UNICODE);
 
         $this->setBody($json);
+        return $this;
     }
 
     public function getHeaders(): array
