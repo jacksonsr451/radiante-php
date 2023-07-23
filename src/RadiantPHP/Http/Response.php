@@ -15,22 +15,22 @@ class Response
         $this->body = '';
     }
 
-    public function setStatusCode($statusCode)
+    public function setStatusCode($statusCode): void
     {
         $this->statusCode = $statusCode;
     }
 
-    public function setHeader($name, $value)
+    public function setHeader($name, $value): void
     {
         $this->headers[$name] = $value;
     }
 
-    public function setBody($body)
+    public function setBody($body): void
     {
         $this->body = $body;
     }
 
-    public function send()
+    public function send(): void
     {
         http_response_code($this->statusCode);
         foreach ($this->headers as $name => $value) {
@@ -40,7 +40,7 @@ class Response
         echo $this->body;
     }
 
-    public function sendJson($data)
+    public function sendJson($data): void
     {
         $this->setHeader('Content-Type', 'application/json');
         $json = json_encode($data, JSON_UNESCAPED_UNICODE);
@@ -49,8 +49,13 @@ class Response
         $this->send();
     }
 
-    public function getHeaders()
+    public function getHeaders(): array
     {
         return $this->headers;
+    }
+
+    public function getBody(): mixed
+    {
+        return $this->body;
     }
 }
