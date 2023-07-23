@@ -46,7 +46,6 @@ class Response
         $json = json_encode($data, JSON_UNESCAPED_UNICODE);
 
         $this->setBody($json);
-        $this->send();
     }
 
     public function getHeaders(): array
