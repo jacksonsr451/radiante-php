@@ -89,7 +89,7 @@ class Route
                 } else {
                     $controller = $this->controller;
                     $action = $this->action;
-                    $instance = new $controller();
+                    $instance = new $controller($request, $response);
 
                     if (method_exists($instance, $action)) {
                         $instance->$action(...$params);

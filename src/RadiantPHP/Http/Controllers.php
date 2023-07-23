@@ -4,10 +4,12 @@ namespace Jacksonsr45\RadiantPHP\Http;
 
 abstract class Controllers
 {
+    protected Request $request;
     protected Response $response;
 
-    public function __construct()
+    public function __construct(Request $request, Response $response)
     {
-        $this->response = new Response();
+        $this->request = $request;
+        $this->response = $response;
     }
 }
