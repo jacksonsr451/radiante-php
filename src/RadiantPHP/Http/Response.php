@@ -15,19 +15,22 @@ class Response
         $this->body = '';
     }
 
-    public function setStatusCode($statusCode): void
+    public function setStatusCode($statusCode): Response
     {
         $this->statusCode = $statusCode;
+        return $this;
     }
 
-    public function setHeader($name, $value): void
+    public function setHeader($name, $value): Response
     {
         $this->headers[$name] = $value;
+        return $this;
     }
 
-    public function setBody($body): void
+    public function setBody($body): Response
     {
         $this->body = $body;
+        return $this;
     }
 
     public function send(): void
