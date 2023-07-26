@@ -9,4 +9,6 @@ interface ResponseInterface extends MessageInterface
     public function withStatus($code, $reasonPhrase = '');
 
     public function getReasonPhrase();
+
+    public function write(string $content): ResponseInterface;
 }
