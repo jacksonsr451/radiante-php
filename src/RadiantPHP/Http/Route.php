@@ -2,110 +2,55 @@
 
 namespace Jacksonsr45\RadiantPHP\Http;
 
-use Exception;
-
 class Route
 {
-    private $wildcards;
-    private $params;
-    private $method;
-    private $path;
-    private $middlewares;
-    private $controller;
-    private $action;
-    private $paransKeys;
+    private static $instanceStack = [];
 
-    public function __construct($wildcards, $method, $path, $middlewares, $controller, $action)
+    public static function get(string $path, $handler): void
     {
-        $this->wildcards = $wildcards;
-        $this->method = $method;
-        $this->path = $path;
-        $this->middlewares = $middlewares;
-        $this->controller = $controller;
-        $this->action = $action;
-        $this->params = [];
-        $this->paransKeys = [];
+        self::addRoute('GET', $path, $handler);
     }
 
-    public function match($request)
+    public static function post(string $path, $handler): void
     {
-        $pattern = $this->convertPathToPattern($this->path);
-        $path = trim($request->getPath(), '/');
-
-        if ($request->getMethod() !== $this->method) {
-            return false;
-        }
-
-        $wildcards = str_replace('/', '\/', $pattern);
-
-        if (preg_match("/^$wildcards$/", trim($path, "/"))) {
-            $explodeUri = explode("/", $path);
-            $explodePattern = explode("/", $pattern);
-            $parans = array_diff($explodeUri, $explodePattern);
-
-            foreach ($parans as $key => $value) {
-                $this->params[$this->paransKeys[$key]] = $value;
-            }
-
-            return true;
-        }
-
-        return false;
+        self::addRoute('POST', $path, $handler);
     }
 
-    private function convertPathToPattern($path)
+    public static function put(string $path, $handler): void
     {
-        foreach (explode('/', ltrim($path, '/')) as $key => $value) {
-            if (str_contains($value, '<')) {
-                $result = explode(":", $value);
-                $values[$key] = "<:" . $result[1];
-                $this->paransKeys[$key] = str_replace('<', '', $result[0]);
-                if (str_contains($values[$key], '<:string>')) {
-                    $values[$key] = $this->wildcards['<:string>'];
-                }
-                if (str_contains($values[$key], '<:number>')) {
-                    $values[$key] = $this->wildcards['<:number>'];
-                }
-                if (str_contains($values[$key], '<:any>')) {
-                    $values[$key] = $this->wildcards['<:any>'];
-                }
-            } else {
-                $values[$key] = $value;
-            }
-        }
-
-        return ltrim(implode('/', $values), "/");
+        self::addRoute('PUT', $path, $handler);
     }
 
-    public function execute($request, $response)
+    public static function delete(string $path, $handler): void
     {
-        $middlewares = $this->middlewares;
-        $params = $this->params;
-        try {
-            $next = function ($request, $response) use (&$middlewares, &$next, $params) {
-                if (!empty($middlewares)) {
-                    $middleware = new (array_shift($middlewares))();
-                    $middleware->handle($request, $response, $next);
-                } else {
-                    $controller = $this->controller;
-                    $action = $this->action;
-                    $instance = new $controller($request, $response);
-
-                    if (method_exists($instance, $action)) {
-                        $instance->$action(...$params);
-                    }
-                }
-            };
-
-            $next($request, $response);
-        } catch (Exception $e) {
-            $response->sendJson(['error' => $e->getMessage()]);
-            die();
-        }
+        self::addRoute('DELETE', $path, $handler);
     }
 
-    public function getParams()
+    public static function patch(string $path, $handler): void
     {
-        return $this->params;
+        self::addRoute('PATCH', $path, $handler);
+    }
+
+    public static function group(array $attributes, callable $callback): void
+    {
+        $router = end(self::$instanceStack);
+        $router->group($attributes, $callback);
+    }
+
+    private static function addRoute(string $method, string $path, $handler): void
+    {
+        $router = end(self::$instanceStack);
+
+        $router->addRoute($method, $path, $handler);
+    }
+
+    public static function registerRouterInstance(Router $router): void
+    {
+        self::$instanceStack[] = $router;
+    }
+
+    public static function getRouterInstance(): Router
+    {
+        return end(self::$instanceStack);
     }
 }
