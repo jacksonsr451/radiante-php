@@ -10,7 +10,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 Route::registerRouterInstance(new Router());
 
-require_once __DIR__ . '/../src/routes.php';
+// require_once __DIR__ . '/../src/routes.php';
 
 $router = Route::getRouterInstance();
 
