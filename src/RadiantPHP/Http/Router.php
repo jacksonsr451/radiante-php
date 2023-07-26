@@ -18,7 +18,7 @@ class Router
         $this->middleware[] = $middleware;
     }
 
-    public function addRoute(string $method, string $path, $handler): void
+    public function addRoute(string $method, string $path, array $handler): void
     {
         $this->routes[] = [
             'method' => $method,
@@ -79,10 +79,12 @@ class Router
         $this->routeGroups = $currentRouteGroups;
     }
 
-    private function executeHandler($handler, ServerRequestInterface $request): ResponseInterface
+    private function executeHandler(array $handler, ServerRequestInterface $request): ResponseInterface
     {
-        if (is_string($handler)) {
-            list($controllerClass, $action) = explode('@', $handler);
+        if (is_array($handler) && count($handler) === 2 && is_string($handler[0]) && is_string($handler[1])) {
+
+            $controllerClass = $handler[0];
+            $action = $handler[1];
 
             $controller = new $controllerClass();
 

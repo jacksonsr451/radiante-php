@@ -6,27 +6,27 @@ class Route
 {
     private static $instanceStack = [];
 
-    public static function get(string $path, $handler): void
+    public static function get(string $path, array $handler): void
     {
         self::addRoute('GET', $path, $handler);
     }
 
-    public static function post(string $path, $handler): void
+    public static function post(string $path, array $handler): void
     {
         self::addRoute('POST', $path, $handler);
     }
 
-    public static function put(string $path, $handler): void
+    public static function put(string $path, array $handler): void
     {
         self::addRoute('PUT', $path, $handler);
     }
 
-    public static function delete(string $path, $handler): void
+    public static function delete(string $path, array $handler): void
     {
         self::addRoute('DELETE', $path, $handler);
     }
 
-    public static function patch(string $path, $handler): void
+    public static function patch(string $path, array $handler): void
     {
         self::addRoute('PATCH', $path, $handler);
     }
@@ -37,7 +37,7 @@ class Route
         $router->group($attributes, $callback);
     }
 
-    private static function addRoute(string $method, string $path, $handler): void
+    private static function addRoute(string $method, string $path, array $handler): void
     {
         $router = end(self::$instanceStack);
 
