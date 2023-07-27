@@ -8,6 +8,7 @@ use Jacksonsr45\RadiantPHP\Http\Message\Interfaces\StreamInterface;
 
 class Response implements ResponseInterface
 {
+    private mixed $jsonPayload;
     private int $statusCode;
     private string $reasonPhrase = '';
     private array $headers = [];
@@ -121,5 +122,20 @@ class Response implements ResponseInterface
     {
         $this->protocolVersion = $version;
         return $this;
+    }
+
+    public function withJson(string $json): ResponseInterface
+    {
+        $this->jsonPayload = $json;
+        $this->withBody(new Stream($json));
+        return $this;
+    }
+
+    function getJson(): mixed
+    {
+        if ($this->jsonPayload) {
+            return json_decode($this->jsonPayload, true);
+        }
+        return null;
     }
 }
