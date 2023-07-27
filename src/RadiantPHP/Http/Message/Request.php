@@ -8,7 +8,7 @@ use Jacksonsr45\RadiantPHP\Http\Message\Interfaces\UriInterface;
 
 class Request implements RequestInterface
 {
-    private $jsonPayload;
+    private mixed $jsonPayload;
     private string $method;
     private UriInterface $uri;
     private array $headers = [];
