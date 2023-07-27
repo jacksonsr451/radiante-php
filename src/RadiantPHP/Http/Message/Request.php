@@ -180,7 +180,7 @@ class Request implements RequestInterface
         return $this;
     }
 
-    function getJson(): mixed
+    public function getJson(): mixed
     {
         if ($this->jsonPayload) {
             return json_decode($this->jsonPayload, true);
