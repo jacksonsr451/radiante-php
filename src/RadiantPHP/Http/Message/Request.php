@@ -8,6 +8,7 @@ use Jacksonsr45\RadiantPHP\Http\Message\Interfaces\UriInterface;
 
 class Request implements RequestInterface
 {
+    private $jsonPayload;
     private string $method;
     private UriInterface $uri;
     private array $headers = [];
@@ -17,17 +18,31 @@ class Request implements RequestInterface
 
     public function __construct(
         string $method,
-        UriInterface $uri,
+        UriInterface | string $uri,
         array $headers = [],
         ?StreamInterface $body = null,
         string $protocolVersion = '1.1'
     ) {
         $this->method = $method;
-        $this->uri = $uri;
+        $this->uri = !is_string($uri) ? $uri : $this->initUri($uri);
         $this->headers = $headers;
-        $this->body = $body;
+        $this->body = $body !== null ? $body : new Stream(fopen('php://temp', 'r+'));
         $this->protocolVersion = $protocolVersion;
         $this->requestTarget = $this->calculateRequestTarget();
+    }
+
+    private function initUri(string $url): UriInterface
+    {
+        $urlComponents = parse_url($url);
+
+        $scheme = $urlComponents['scheme'] ?? '';
+        $host = $urlComponents['host'] ?? '';
+        $port = $urlComponents['port'] ?? '';
+        $path = $urlComponents['path'] ?? '';
+        $query = $urlComponents['query'] ?? '';
+        $fragment = $urlComponents['fragment'] ?? '';
+
+        return new Uri($scheme, '', $host, $port, $path, $query, $fragment);
     }
 
     public function getMethod(): string
@@ -129,6 +144,15 @@ class Request implements RequestInterface
         return $this;
     }
 
+    public function write(string $content): RequestInterface
+    {
+        $body = $this->getBody();
+        $body->write($content);
+
+        $this->withBody($body);
+        return $this;
+    }
+
     public function getRequestTarget(): mixed
     {
         return $this->requestTarget;
@@ -147,5 +171,20 @@ class Request implements RequestInterface
             $target .= '?' . $this->uri->getQuery();
         }
         return $target;
+    }
+
+    public function withJsonPayload(string $json): RequestInterface
+    {
+        $this->jsonPayload = $json;
+        $this->withBody(new Stream($json));
+        return $this;
+    }
+
+    function getJson(): mixed
+    {
+        if ($this->jsonPayload) {
+            return json_decode($this->jsonPayload, true);
+        }
+        return null;
     }
 }
