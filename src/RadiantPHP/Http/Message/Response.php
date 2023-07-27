@@ -127,14 +127,13 @@ class Response implements ResponseInterface
     public function withJson(string $json): ResponseInterface
     {
         $this->jsonPayload = $json;
-        $this->withBody(new Stream($json));
         return $this;
     }
 
     public function getJson(): mixed
     {
         if ($this->jsonPayload) {
-            return json_decode($this->jsonPayload, true);
+            return json_decode($this->jsonPayload);
         }
         return null;
     }
