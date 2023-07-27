@@ -15,10 +15,4 @@ interface RequestInterface extends MessageInterface
     public function getUri();
 
     public function withUri(UriInterface $uri, $preserveHost = false);
-
-    public function write(string $data): RequestInterface;
-
-    public function withJsonPayload(string $json): RequestInterface;
-
-    function getJson(): mixed;
 }

@@ -25,4 +25,10 @@ interface MessageInterface
     public function getBody(): StreamInterface;
 
     public function withBody(StreamInterface $body): MessageInterface;
+
+    public function write(string $data): MessageInterface;
+
+    public function withJson(string $json): MessageInterface;
+
+    function getJson(): mixed;
 }

@@ -173,7 +173,7 @@ class Request implements RequestInterface
         return $target;
     }
 
-    public function withJsonPayload(string $json): RequestInterface
+    public function withJson(string $json): RequestInterface
     {
         $this->jsonPayload = $json;
         return $this;
