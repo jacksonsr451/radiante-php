@@ -14,8 +14,10 @@ class ServerRequestFactory
 {
     private static $router;
 
-    public static function createServerRequest(string $pathToRoutes): ServerRequestInterface
+    public static function createServerRequest(string $pathToRoutes = ""): ServerRequestInterface
     {
+        $pathToRoutes = $pathToRoutes === "" ? $_ENV["ROUTES_PATH"] : $pathToRoutes;
+
         Route::registerRouterInstance(new Router());
 
         require_once $pathToRoutes;
