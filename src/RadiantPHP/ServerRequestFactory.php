@@ -16,7 +16,7 @@ class ServerRequestFactory
 
     public static function createServerRequest(string $pathToRoutes = ""): ServerRequestInterface
     {
-        $pathToRoutes = $pathToRoutes === "" ? $_ENV["ROUTES_PATH"] : $pathToRoutes;
+        $pathToRoutes = $pathToRoutes === "" ? ROOT_PATH . "/" . $_ENV["ROUTES_PATH"] : $pathToRoutes;
 
         Route::registerRouterInstance(new Router());
 
