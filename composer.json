@@ -3,7 +3,7 @@
   "description": "This is a simple micro-framework in PHP",
   "type": "library",
   "license": "MIT",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "autoload": {
     "psr-4": {
       "Jacksonsr45\\": "src/"
