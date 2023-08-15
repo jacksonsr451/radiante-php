@@ -62,6 +62,22 @@ $response = ServerRequestFactory::handleRequest($request);
 ServerRequestFactory::sendHttpResponse($response);
 ```
 
+or
+
+```php
+require_once __DIR__ . '/../vendor/autoload.php';
+define('ROOT_PATH', __DIR__ . "/..");
+
+$dotenv = Dotenv::createImmutable(__DIR__ . "/..");
+$dotenv->load();
+
+$request = ServerRequestFactory::createServerRequest();
+$response = ServerRequestFactory::handleRequest($request);
+ServerRequestFactory::sendHttpResponse($response);
+```
+
 Make sure to replace `'../vendor/autoload.php'` with the correct path to your Composer autoloader if it differs.
 
 With these simple steps, you have successfully integrated the RadiantPHP ServerRequestFactory into your index.php file, allowing you to handle incoming HTTP requests and send appropriate responses in your PHP application.
+
+include in to folder src a file routes.php by settings to routes
