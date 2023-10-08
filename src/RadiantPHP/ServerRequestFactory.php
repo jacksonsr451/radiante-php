@@ -2,6 +2,7 @@
 
 namespace Jacksonsr45\RadiantPHP;
 
+use DI\Container;
 use Jacksonsr45\RadiantPHP\Http\Message\Interfaces\ResponseInterface;
 use Jacksonsr45\RadiantPHP\Http\Message\Interfaces\ServerRequestInterface;
 use Jacksonsr45\RadiantPHP\Http\Message\ServerRequest;
@@ -14,11 +15,9 @@ class ServerRequestFactory
 {
     private static $router;
 
-    public static function createServerRequest(string $pathToRoutes = ""): ServerRequestInterface
+    public static function createServerRequest(string $pathToRoutes, Container $container): ServerRequestInterface
     {
-        $pathToRoutes = $pathToRoutes === "" ? ROOT_PATH . "/" . $_ENV["ROUTES_PATH"] : $pathToRoutes;
-
-        Route::registerRouterInstance(new Router());
+        Route::registerRouterInstance(new Router($container));
 
         require_once $pathToRoutes;
 

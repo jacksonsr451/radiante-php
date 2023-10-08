@@ -2,6 +2,7 @@
 
 namespace Jacksonsr45\RadiantPHP\Http;
 
+use DI\Container;
 use Jacksonsr45\RadiantPHP\Http\Errors\RuntimeException;
 use Jacksonsr45\RadiantPHP\Http\Message\Interfaces\ResponseInterface;
 use Jacksonsr45\RadiantPHP\Http\Message\Interfaces\ServerRequestInterface;
@@ -12,6 +13,10 @@ class Router
     private array $routes = [];
     private array $routeGroups = [];
     protected array $middleware = [];
+
+    public function __construct(private Container $container)
+    {
+    }
 
     public function addMiddleware($middleware)
     {
@@ -86,7 +91,7 @@ class Router
             $controllerClass = $handler[0];
             $action = $handler[1];
 
-            $controller = new $controllerClass();
+            $controller = $this->container->get($controllerClass);
 
             $result = call_user_func([$controller, $action], $request);
 
