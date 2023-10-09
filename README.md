@@ -120,4 +120,31 @@ use Jacksonsr45\RadiantPHP\Http\Route;
 Route::put('/user', [UserController::class, 'update']);
 ```
 
+## **Creating Controller**:
+
+By creating a new controller is simple, build a new class and in this class if is required using a DI create a `__contruct()`, and in inject a interface.
+
+By functionalit is required in `index.php` include is partial code:
+```php
+$container->set(ResponseInterface::class, create(Response::class));
+```
+
+And in controller is required:
+
+```php
+use Jacksonsr45\RadiantPHP\Http\Message\Interfaces\ResponseInterface;
+
+class UserController
+{
+    public function __construct(
+        private readonly ResponseInterface $response
+    ) {}
+
+    public function index(): ResponseInterface
+    {
+        return $response->withStatus(200)->write('Hello World!');
+    }
+}
+```
+
 With these simple steps, you have successfully integrated the RadiantPHP ServerRequestFactory into your index.php file, allowing you to handle incoming HTTP requests and send appropriate responses in your PHP application.
